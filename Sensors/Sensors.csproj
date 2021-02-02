@@ -89,6 +89,7 @@
   </Target>
   <PropertyGroup>
     <PostBuildEvent>if $(ConfigurationName) == Release (
+  mkdir $(SolutionDir)Build &gt; NUL
   "%25USERPROFILE%25\.nuget\packages\ilmerge\3.0.41\tools\net452\ILMerge.exe" /out:$(SolutionDir)Build\QANT.PRTG.Sensors.exe $(TargetDir)QANT.PRTG.Sensors.exe $(TargetDir)CLAP.dll $(TargetDir)SnmpSharpNet.dll /target:exe
 )</PostBuildEvent>
   </PropertyGroup>
