@@ -3,3 +3,13 @@
 ################################################################################
 
 /.vs/QANT.PRTG/v15/Server/sqlite3
+/packages
+/Sensors/bin
+/Sensors/obj
+/.vs/slnx.sqlite
+*.json
+/.vs/QANT.PRTG/v15
+/Build/QANT.PRTG.Sensors.exe
+/Build/QANT.PRTG.Sensors.pdb
+/Sensors/PRTG.Sensors.csproj.user
+/QANT.PRTG.sln.DotSettings
