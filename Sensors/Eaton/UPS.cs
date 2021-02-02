@@ -47,7 +47,20 @@ namespace QANT.PRTG.Eaton
             foreach (var item in asnItems)
                 pdu.VbList.Add(item.Key);
 
-            var result = (SnmpV2Packet)target.Request(pdu, agentParams);
+            var result = new SnmpV2Packet();
+            try
+            {
+                result = (SnmpV2Packet)target.Request(pdu, agentParams);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Request has reached maximum retries.")
+                {
+                    Error.WriteOutput("SNMP Request to " + credentials.Host + " with community " + credentials.Community + " has exceeded the maximum number of retries.");
+                    return;
+                }
+            }
+
             if (result != null)
             {
                 // Populate Results

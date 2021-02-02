@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Windows.Forms;
 
 namespace QANT.PRTG.CPS
 {
@@ -50,7 +51,20 @@ namespace QANT.PRTG.CPS
             foreach (var item in asnItems)
                 pdu.VbList.Add(item.Key);
 
-            var result = (SnmpV1Packet)target.Request(pdu, agentParams);
+            var result = new SnmpV1Packet();
+            try
+            {
+                result = (SnmpV1Packet) target.Request(pdu, agentParams);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Request has reached maximum retries.")
+                {
+                    Error.WriteOutput("SNMP Request to " + credentials.Host + " with community " + credentials.Community + " has exceeded the maximum number of retries.");
+                    return;
+                }
+            }
+
             if (result != null)
             {
                 // Populate Results
@@ -207,11 +221,12 @@ namespace QANT.PRTG.CPS
             {
                 Error.WriteOutput("No Results Received from " + credentials.Host + " using community " + credentials.Community);
             }
-
+            
         }
 
         private static string CheckDateTimeFormat(string inputDt, string model)
         {
+            inputDt = inputDt.Trim();
 #if OLDCODE
             if (model == "OL1500ERTXL2U" || model == "OL3000ERTXL2U")
             {
@@ -229,6 +244,8 @@ namespace QANT.PRTG.CPS
 #else
             try
             {
+                if (inputDt.Length == 11)
+                    inputDt = inputDt.Substring(0, 10);
                 if (inputDt.Length != 10) return inputDt;
                 var month = inputDt.Substring(0, 2);
                 var day = inputDt.Substring(3, 2);
