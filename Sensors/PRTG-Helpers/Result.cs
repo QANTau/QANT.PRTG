@@ -22,6 +22,7 @@ namespace QANT.PRTG
             //set { channels = value; }
         }
         private string _text;
+        private bool _error;
 
         /// <summary>
         /// Text
@@ -30,6 +31,12 @@ namespace QANT.PRTG
         {
             get { return _text; }
             set { _text = value; }
+        }
+
+        public bool Error
+        {
+            get { return _error; }
+            set { _error = value; }
         }
 
         /// <summary>
@@ -41,6 +48,11 @@ namespace QANT.PRTG
                 new XElement("prtg",
                              new XElement("text", Text)
                     );
+
+            if (Error)
+            {
+                prtg.Add(new XElement("error", "1"));
+            }
 
             foreach (var channel in Channels)
             {
